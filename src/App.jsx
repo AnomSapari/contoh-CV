@@ -10,8 +10,9 @@ function App() {
   };
 
   const name = "Sapari Om";
-  const title = "Driver Operasional Profesional";
-  const subtitle = "Mantan Welder | Disiplin • Teliti • Bertanggung Jawab";
+  const title = "Professional Operational Driver";
+  const subtitle =
+    "Former Welder | Disciplined • Detail-Oriented • Responsible";
 
   const phone = "083891515097";
   const email = "saparianom80@gmail.com";
@@ -20,70 +21,72 @@ function App() {
     "https://www.linkedin.com/in/sapario-ma-6b1b5518b/";
 
   const menu = [
-    { label: "Tentang", id: "tentang" },
-    { label: "Pengalaman", id: "pengalaman" },
+    { label: "About", id: "tentang" },
+    { label: "Experience", id: "pengalaman" },
     { label: "Skills", id: "skills" },
-    { label: "Proyek", id: "proyek" },
-    { label: "Kontak", id: "kontak" },
+    { label: "Projects", id: "proyek" },
+    { label: "Contact", id: "kontak" },
   ];
 
   const experiences = [
     {
-      period: "2015 - Sekarang",
-      position: "Driver Operasional / Asisten Office",
+      period: "2015 - Present",
+      position: "Operational Driver / Office Assistant",
       company: "PT. Byrnecut Indonesia",
-      desc: "Antar - jemput & administrasi kantor",
-      highlights: ["Pengurusan dokumen karyawan"],
+      desc: "Employee transportation & office support",
+      highlights: ["Handling employee documents"],
     },
     {
       period: "2012 - 2014",
-      position: "Driver Cargo Box",
+      position: "Cargo Box Driver",
       company: "PT. Nuraria Maju Bersama",
-      desc: "Distribusi barang pabrik & toko",
-      highlights: ["Pengiriman tepat waktu"],
+      desc: "Industrial goods distribution",
+      highlights: ["On-time delivery operations"],
     },
     {
       period: "2003",
-      position: "Operator CNC / Welder",
+      position: "CNC Operator / Welder",
       company: "PT. Buana Pratama Perkasa",
-      desc: "CNC Bubut & Welding konstruksi",
-      highlights: ["Fabrication & machining"],
+      desc: "CNC machining & welding fabrication",
+      highlights: ["Industrial fabrication & machining"],
     },
-    { period: "1999 - 2000", 
-      position: "ABK Cargo", 
-      company: "Kiong Ping Shippin Company, Sarawak", 
-      desc: "Abk Dapur kapal / Oiler", 
-      highlights: ["Merawat mesin kapal, menyiapkan makan Crew kapal"] 
-    }, 
-    { period: "1997 - 1999", 
-      position: "Helper Welder / ", 
-      company: "PT. Nuasansa Pesona Asri, Jakarta", 
-      desc: "Pengelasan struktur baja, perbaikan mesin, dan fabrikasi custom.", 
-      highlights: ["SMAW & MIG Welding", "Peroyek gedung Sentra Mampang", "Mekanikal / Elektrikal"] 
+    {
+      period: "1999 - 2000",
+      position: "Cargo Crew (ABK)",
+      company: "Kiong Ping Shipping Company, Sarawak",
+      desc: "Ship engine assistant / oiler",
+      highlights: ["Engine maintenance & crew support"],
+    },
+    {
+      period: "1997 - 1999",
+      position: "Welder Helper",
+      company: "PT. Nuasansa Pesona Asri, Jakarta",
+      desc: "Steel structure welding & fabrication",
+      highlights: ["SMAW & MIG welding", "Construction project work"],
     },
   ];
 
   const skills = [
-    { name: "Mengemudi Defensif", level: 95 },
-    { name: "Welding SMAW/MIG", level: 90 },
-    { name: "Perawatan Kendaraan", level: 85 },
-    { name: "Manajemen Rute", level: 88 },
-    { name: "Disiplin Kerja", level: 92 },
-    { name: "Keselamatan Kerja", level: 90 },
+    { name: "Defensive Driving", level: 95 },
+    { name: "SMAW / MIG Welding", level: 90 },
+    { name: "Vehicle Maintenance", level: 85 },
+    { name: "Route Management", level: 88 },
+    { name: "Work Discipline", level: 92 },
+    { name: "Work Safety (HSE)", level: 90 },
   ];
 
   const projects = [
     {
-      title: "Transport Operasional",
-      desc: "Pengiriman & transport karyawan tanpa kecelakaan.",
+      title: "Operational Transport",
+      desc: "Safe employee transportation with zero accidents.",
     },
     {
-      title: "Fabrikasi & Welding",
-      desc: "Pembuatan struktur besi & maintenance.",
+      title: "Welding & Fabrication",
+      desc: "Steel structure manufacturing and maintenance.",
     },
     {
-      title: "Maintenance Mesin",
-      desc: "Perawatan CNC & mesin industri.",
+      title: "Machine Maintenance",
+      desc: "CNC and industrial machine servicing.",
     },
   ];
 
@@ -114,32 +117,14 @@ function App() {
             {isMenuOpen ? "✕" : "☰"}
           </button>
         </div>
-
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-t py-6 text-center">
-            {menu.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollTo(item.id)}
-                className="block w-full py-3"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        )}
       </nav>
 
       {/* HERO */}
-      <section
-        id="home"
-        className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center"
-      >
+      <section className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center">
         <div className="max-w-6xl mx-auto px-5 grid md:grid-cols-2 gap-10 items-center">
 
           <div>
 
-            {/* ANIMATED NAME */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
@@ -166,7 +151,7 @@ function App() {
                 onClick={() => scrollTo("kontak")}
                 className="bg-white text-blue-700 px-6 py-3 rounded-xl font-semibold"
               >
-                Hubungi Saya
+                Contact Me
               </button>
 
               <button
@@ -188,18 +173,19 @@ function App() {
         </div>
       </section>
 
-      {/* TENTANG */}
-      <section id="tentang" className="py-24 text-center max-w-4xl mx-auto px-5">
-        <h2 className="text-4xl font-bold mb-6">Tentang Saya</h2>
+      {/* ABOUT */}
+      <section className="py-24 text-center max-w-4xl mx-auto px-5">
+        <h2 className="text-4xl font-bold mb-6">About Me</h2>
         <p className="text-zinc-600">
-          Profesional driver operasional dengan pengalaman welding & industri.
+          Experienced operational driver with welding and industrial background.
+          Highly disciplined, detail-oriented, and safety-focused.
         </p>
       </section>
 
       {/* EXPERIENCE */}
-      <section id="pengalaman" className="bg-white py-24">
+      <section className="bg-white py-24">
         <div className="max-w-5xl mx-auto px-5">
-          <h2 className="text-4xl font-bold text-center mb-12">Pengalaman</h2>
+          <h2 className="text-4xl font-bold text-center mb-12">Experience</h2>
 
           <div className="space-y-8">
             {experiences.map((exp, i) => (
@@ -214,7 +200,7 @@ function App() {
       </section>
 
       {/* SKILLS */}
-      <section id="skills" className="py-24 bg-zinc-100">
+      <section className="py-24 bg-zinc-100">
         <div className="max-w-5xl mx-auto px-5">
           <h2 className="text-4xl font-bold text-center mb-10">Skills</h2>
 
@@ -237,10 +223,10 @@ function App() {
         </div>
       </section>
 
-      {/* PROJECT */}
-      <section id="proyek" className="py-24 bg-white">
+      {/* PROJECTS */}
+      <section className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-5 text-center">
-          <h2 className="text-4xl font-bold mb-10">Proyek</h2>
+          <h2 className="text-4xl font-bold mb-10">Projects</h2>
 
           <div className="grid md:grid-cols-3 gap-6">
             {projects.map((p, i) => (
@@ -254,8 +240,8 @@ function App() {
       </section>
 
       {/* CONTACT */}
-      <section id="kontak" className="py-24 bg-zinc-900 text-white text-center">
-        <h2 className="text-4xl font-bold mb-6">Kontak</h2>
+      <section className="py-24 bg-zinc-900 text-white text-center">
+        <h2 className="text-4xl font-bold mb-6">Contact</h2>
 
         <div className="flex justify-center gap-4 mb-6">
           <a href={whatsapp} className="bg-green-600 px-6 py-3 rounded-xl">
