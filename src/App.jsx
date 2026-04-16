@@ -14,13 +14,11 @@ function App() {
   const phone = "083891515097";
   const email = "saparianom80@gmail.com";
 
-  // Toggle Dark Mode
+  // Dark Mode
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    darkMode 
+      ? document.documentElement.classList.add("dark")
+      : document.documentElement.classList.remove("dark");
   }, [darkMode]);
 
   // Particle Background
@@ -127,7 +125,7 @@ function App() {
 
   const education = [
     { year: "1993 - 1996", school: "SMK Karya Guna Jakarta", major: "Teknik Otomotif" },
-    { year: "1991 - 1993", school: "SMP Negeri 12 Jakarta", major: "" },
+    { year: "1991 - 199", school: "SMP Negeri 12 Jakarta", major: "" },
   ];
 
   const certifications = [
@@ -154,104 +152,119 @@ function App() {
 
   // Improved Smooth Scroll with offset (agar tidak tertutup navbar)
   const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 80; // tinggi navbar
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition - bodyRect - offset;
-
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-      setIsMenuOpen(false); // tutup menu mobile
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      setIsMenuOpen(false);
     }
   };
 
   // Download PDF Function
   const downloadPDF = async () => {
-    const element = cvRef.current;
-    if (!element) return alert("CV tidak ditemukan");
+  const element = cvRef.current;
+  if (!cvRef.current) return alert("CV tidak ditemukan");
 
-    // Scroll ke atas dulu
-    window.scrollTo(0, 0);
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 300)); // tunggu render
 
-    try {
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        logging: false,
-      });
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      logging: false,
+    });
 
-     const pdf = new jsPDF("p", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgData = canvas.toDataURL("image/png");
 
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight * 0.95);
+    const pdf = new jsPDF("p", "mm", "a4");
 
-      const finalWidth = imgWidth * ratio;
-      const finalHeight = imgHeight * ratio;
+    const pdfWidth = 210;
+    const pdfHeight = 297;
 
-    pdf.addImage(canvas.toDataURL("image/png"), "PNG", (pdfWidth - finalWidth) / 2, 10, finalWidth, finalHeight);
-      pdf.save(`${currentLang.name.replace(" ", "_")}_CV.pdf`);
-    } catch (err) {
-      console.error(err);
-      alert("Gagal membuat PDF. Coba refresh halaman.");
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+
+    // 🔥 SCALE YANG BENAR
+    const imgHeightInPdf = (imgHeight * pdfWidth) / imgWidth;
+
+    let heightLeft = imgHeightInPdf;
+    let position = 0;
+
+   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${currentLang.name}_CV.pdf`);
+    } catch (e) {
+      alert("Gagal generate PDF");
     }
   };
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-200 transition-colors duration-500">
 
-      {/* Navbar */}
-      <nav className="fixed top-0 z-50 w-full bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border-b border-zinc-200 dark:border-zinc-800">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-500">{currentLang.name}</h1>
+     {/* ==================== NAVBAR (SUDAH DIPERBAIKI) ==================== */}
+<nav className="fixed top-0 z-50 w-full bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border-b border-zinc-200 dark:border-zinc-800">
+  <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+    
+    {/* Logo */}
+    <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-500">
+      {currentLang.name}
+    </h1>
 
-          <div className="hidden md:flex gap-10 text-sm font-medium">
-            {["about", "experience", "education", "certifications", "skills", "projects", "contact"].map((id) => (
-             <button key={id} onClick={() => scrollToSection(id)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                {currentLang[id]}
-              </button>
-            ))}
-          </div>
+    {/* Menu Desktop */}
+    <div className="hidden md:flex gap-8 text-sm font-medium">
+      {["about", "experience", "education", "certifications", "skills", "projects", "contact"].map((id) => (
+        <button
+          key={id}
+          onClick={() => scrollToSection(id)}
+          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+        >
+          {currentLang[id]}
+        </button>
+      ))}
+    </div>
 
-          <div className="flex items-center gap-4">
-            {/* Language Toggle - SUDAH BERFUNGSI */}
-            <button 
-              onClick={() => setLanguage(language === "en" ? "id" : "en")}
-              className="px-4 py-2 text-xs border border-zinc-300 dark:border-zinc-700 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-            >
-              {language === "en" ? "ID" : "EN"}
-            </button>
+    {/* Tombol Translate + Dark Mode + Hamburger */}
+    <div className="flex items-center gap-3">
+      {/* Tombol Translate - sudah digeser ke kiri */}
+      <button
+        onClick={() => setLanguage(language === "en" ? "id" : "en")}
+        className="px-4 py-2 text-xs border border-zinc-300 dark:border-zinc-700 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+      >
+        {language === "en" ? "ID" : "EN"}
+      </button>
 
-            {/* Dark/Light Toggle - SUDAH BERFUNGSI */}
-            <button 
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-3 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-            >
-              {darkMode ? "☀️" : "🌙"}
-            </button>
+      {/* Dark Mode */}
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        className="p-3 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
+      >
+        {darkMode ? "☀️" : "🌙"}
+      </button>
 
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-3xl z-50">
-              {isMenuOpen ? "✕" : "☰"}
-            </button>
-          </div>
-        </div>
-        {/* Hamburger Menu Mobile */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white dark:bg-zinc-900 border-t dark:border-zinc-800 py-6">
-            <div className="flex flex-col px-6 gap-6 text-lg">
-              {["about","experience","education","certifications","skills","projects","contact"].map((id) => (
-                <button key={id} onClick={() => scrollToSection(id)} className="text-left py-2 hover:text-blue-600 dark:hover:text-blue-400">
-                  {currentLang[id]}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </nav>
+      {/* Hamburger Mobile */}
+      <button
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className="md:hidden text-3xl"
+      >
+        {isMenuOpen ? "✕" : "☰"}
+      </button>
+    </div>
+  </div>
+
+  {/* Mobile Menu */}
+  {isMenuOpen && (
+    <div className="md:hidden bg-white dark:bg-zinc-900 border-t py-6 px-6 flex flex-col gap-6 text-lg">
+      {["about", "experience", "education", "certifications", "skills", "projects", "contact"].map((id) => (
+        <button
+          key={id}
+          onClick={() => scrollToSection(id)}
+          className="text-left hover:text-blue-600 dark:hover:text-blue-400"
+        >
+          {currentLang[id]}
+        </button>
+      ))}
+    </div>
+  )}
+</nav>
 
       {/* HERO + Particle */}
       <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-zinc-100 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
@@ -445,21 +458,58 @@ function App() {
       {/* SKILLS, PROJECTS, CONTACT tetap sama seperti sebelumnya */}
       {/* ... (saya singkat agar tidak terlalu panjang, tapi tetap pakai motion yang sama) */}
 
-      {/* CV PRINT VERSION */}
-      <div ref={cvRef} className="absolute -left-[99999px] top-0 w-[210mm] bg-white text-zinc-900 p-12 shadow-2xl" style={{ fontFamily: "system-ui, sans-serif" }}>
-        {/* Isi CV untuk PDF - sudah termasuk sertifikasi */}
-        <div className="text-center mb-12">
+      {/* ==================== CV PRINT VERSION (INI YANG DIPERBAIKI) ==================== */}
+      <div ref={cvRef} className="absolute -left-[99999px] top-0 w-[210mm] bg-white text-zinc-900 p-10 shadow-2xl" style={{ fontFamily: "system-ui, sans-serif" }}>
+        <div className="text-center mb-10">
           <h1 className="text-5xl font-bold text-blue-700">{currentLang.name}</h1>
           <p className="text-2xl mt-2">{currentLang.title}</p>
         </div>
 
-        <div className="border-t pt-8">
-          <h2 className="text-2xl font-semibold mb-4">Professional Summary</h2>
-          <p>{currentLang.about}</p>
+        <h2 className="text-2xl font-semibold border-b pb-2 mb-6">Professional Summary</h2>
+        <p className="text-lg leading-relaxed mb-10">{currentLang.about}</p>
+
+        <h2 className="text-2xl font-semibold border-b pb-2 mb-6">Experience</h2>
+        {experiences.map((exp, i) => (
+          <div key={i} className="mb-8">
+            <div className="flex justify-between">
+              <h3 className="font-semibold">{exp.position}</h3>
+              <span className="text-blue-600">{exp.period}</span>
+            </div>
+            <p className="text-zinc-600">{exp.company}</p>
+            <p className="mt-2">{exp.desc}</p>
+          </div>
+        ))}
+
+        <h2 className="text-2xl font-semibold border-b pb-2 mb-6">Education</h2>
+        {education.map((edu, i) => (
+          <div key={i} className="mb-6">
+            <h3>{edu.school}</h3>
+            <p className="text-sm text-zinc-500">{edu.year}</p>
+          </div>
+        ))}
+
+        <h2 className="text-2xl font-semibold border-b pb-2 mb-6">Certifications</h2>
+        {certifications.map((cert, i) => (
+          <div key={i} className="mb-4">
+            <h3 className="font-medium">{cert.name}</h3>
+            <p className="text-sm text-zinc-500">{cert.issuer} • {cert.year}</p>
+          </div>
+        ))}
+
+        <h2 className="text-2xl font-semibold border-b pb-2 mb-6">Skills</h2>
+        <div className="grid grid-cols-2 gap-y-3">
+          {skills.map((s, i) => (
+            <div key={i} className="flex justify-between">
+              <span>{s.name}</span>
+              <span className="font-semibold text-blue-600">{s.level}%</span>
+            </div>
+          ))}
         </div>
 
-        {/* Experience, Education, Certifications, Skills */}
-        {/* ... (bisa ditambah jika diperlukan) */}
+        <div className="mt-16 text-center text-sm text-zinc-500">
+          📞 {phone} | ✉️ {email}<br />
+          © 2026 Sapari Om
+        </div>
       </div>
 
       <footer className="py-12 text-center text-sm text-zinc-500 dark:text-zinc-600">
